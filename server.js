@@ -3,7 +3,8 @@ import dotenv from 'dotenv';
 import morgan from 'morgan';
 import cors from 'cors';
 import {conn} from './db/conn.js';
-import userRoutes from './routes/users.js'
+import userRoutes from './routes/users.js';
+import recipeRoutes from './routes/recipes.js';
 
 dotenv.config();
 conn();
@@ -18,6 +19,7 @@ app.use(express.urlencoded({extended:true}));
 
 //Routes
 app.use('/api/users', userRoutes);
+app.use('/api/recipes', recipeRoutes);
 app.get('/', (req, res) => {
     res.send('Welcome to my API');
 })

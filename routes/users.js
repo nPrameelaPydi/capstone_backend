@@ -19,7 +19,7 @@ router.get('/', async (req, res) => {
     }
 });
 // GET route to fetch users by id
-router.get('/id', async (req, res) => {
+router.get('/:id', async (req, res) => {
     try {
         const {id} = req.params;
         const users = await User.findById({id});
