@@ -32,6 +32,29 @@ router.get('/:id', async (req, res) => {
     }
 })
 
+/**
+ * POST /api/recipes
+ * @description create a new Recipe
+ */
+router.post('/', async (req, res) => {
+    try {
+        const { title, ingredients, instructions, createdBy } = req.body;        
+        // Create a new recipe
+        const newrecipe = new Recipe({
+            title,
+            ingredients,
+            instructions,
+            createdBy,
+        });
+        // Save the recipe to the database
+        const savedrecipe = await newrecipe.save();
+        res.status(201).json(savedrecipe);
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ message: 'Error creating recipe', error });
+    }
+})
+
 
 
 export default router;
