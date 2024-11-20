@@ -56,5 +56,22 @@ router.post('/', async (req, res) => {
 })
 
 
+// DELETE route to remove a recipe by ID
+router.delete('/:id', async (req, res) => {
+    const recipeId = req.params.id;
+    try {
+        const deletedRecipe = await Recipe.findByIdAndDelete(recipeId);
+        if (!deletedRecipe) {
+            return res.status(404).json({ message: 'Recipe not found' });
+        }
+        res.status(200).json({ message: 'Recipe deleted successfully', deletedRecipe });
+    } catch (err) {
+        console.log('Error deleting recipe:', err);
+        res.status(500).json({ message: 'Error deleting recipe', error: err.message });
+    }
+});
+
+
+
 
 export default router;
