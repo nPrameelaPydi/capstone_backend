@@ -46,4 +46,33 @@ router.post('/', async (req, res, next) => {
     }
 });
 
+/**
+ * POST /api/chats/:id/msg
+ * @description adds a new msg in a chat
+ */
+router.post('/:id/message', async (req, res) => {
+  try {
+    const { id } = req.params;
+   
+    // Find the chat by ID
+    const chat = await Chats.findById(id);
+
+    if (!chat) {
+      return res.status(404).json({ error: 'Chat not found' });
+    }
+
+    // Add the new message to the `messages` array
+    chat.messages.push(req.body);
+
+    // Save the updated chat
+    await chat.save();
+
+    res.status(201).json(chat);
+  } catch (e) {
+    console.error(e);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+
 export default router;
