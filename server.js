@@ -5,6 +5,7 @@ import cors from 'cors';
 import {conn} from './db/conn.js';
 import userRoutes from './routes/users.js';
 import recipeRoutes from './routes/recipes.js';
+import chatRoutes from './routes/chats.js';
 
 dotenv.config();
 conn();
@@ -20,6 +21,7 @@ app.use(express.urlencoded({extended:true}));
 //Routes
 app.use('/api/users', userRoutes);
 app.use('/api/recipes', recipeRoutes);
+app.use('/api/chats', chatRoutes);
 app.get('/', (req, res) => {
     res.send('Welcome to my API');
 })
