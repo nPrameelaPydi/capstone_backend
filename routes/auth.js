@@ -8,9 +8,11 @@ const router = express.Router();
  * /api/auth/register
  * @description User Registration route
  */
-router.post('/register', async (req, res) => {
-    const {name, email, password} = req.body;
+router.post('/register', async (req, res) => {    
     try{
+        const {name, email, password} = req.body;
+        console.log(req.body);
+        
         //check if email already registered
         const existingUser = await User.findOne({email});
         if (existingUser) {
