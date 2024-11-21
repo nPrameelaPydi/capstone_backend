@@ -1,27 +1,53 @@
 import express from 'express';
 import User from '../models/User.js';
+import Recipe from '../models/Recipe.js';
 
 const router = express.Router();
 
 /**
- * GET /api/users
- * @description Returns all users
+ * GET /api/users/:userId/profile
+ * @description Fetch a user's profile (user info && Recipes belongs to user)
  */
-// GET route to fetch all users
-router.get('/', async (req, res) => {
+router.get('/:userId/profile', async (req, res) => {
+    try{
+        const userId = req.params.userId;
+        //fetch user data
+        const user = await User.findById(userId);
+        if(!user) {
+            return res.status(404).json({message: 'User not found'});
+        }
+        //fetch all recipes created by this user
+        const recipes = await Recipe.find({createdBY: userId});
+        //combine user data with their recipes
+        res.json({user, recipes});
+        
+    }catch(err){
+        console.error(err);
+        res.status(500).json({ message: 'Error fetching user profile', error: err.message });
+    }
+})
+
+/**
+ * GET /api/users
+ * @description route to fetch users by id
+ */
+router.get('/:id', async (req, res) => {
     try {
-        const users = await User.find();
+        const {id} = req.params;
+        const users = await User.findById({id});
         res.json(users);
     } catch (err) {
         console.log(err);
         res.status(500).json({ message: err.message });
     }
 });
-// GET route to fetch users by id
-router.get('/:id', async (req, res) => {
+/**
+ * GET /api/users
+ * @description route to fetch all users
+ */
+router.get('/', async (req, res) => {
     try {
-        const {id} = req.params;
-        const users = await User.findById({id});
+        const users = await User.find();
         res.json(users);
     } catch (err) {
         console.log(err);

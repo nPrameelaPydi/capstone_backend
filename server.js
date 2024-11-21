@@ -26,7 +26,7 @@ app.use('/api/chats', chatRoutes);
 app.use('/api/auth', authRoutes);
 
 app.get('/', (req, res) => {
-    res.send('Welcome to my API');
+    res.send('Welcome to Food&Friends API');
 })
 
 //Error handler
