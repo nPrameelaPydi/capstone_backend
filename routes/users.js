@@ -1,7 +1,6 @@
 import express from 'express';
 import User from '../models/User.js';
 
-
 const router = express.Router();
 
 /**
@@ -33,9 +32,8 @@ router.get('/:id', async (req, res) => {
 
 /**
  * POST /api/users
- * @description Add a new User
+ * @description create a new User
  */
-// POST route to create a new user
 router.post('/', async (req, res) => {
     try {
         const { name, email, password } = req.body;
@@ -62,15 +60,6 @@ router.post('/', async (req, res) => {
         res.status(500).json({ message: 'Error creating user', error });
     }
 });
-
-
-
-
-
-
-
-
-
 
 
 
