@@ -39,7 +39,7 @@ router.post('/', async (req, res, next) => {
     try {
         const newChat = await new Chats({title: "New Chat"});
         await newChat.save();
-        res.status(201).json({newChat});
+        res.status(201).json((newChat));
     } catch (e) {
         console.error(e);
         
