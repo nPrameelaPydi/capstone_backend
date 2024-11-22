@@ -2,6 +2,7 @@ import express from 'express';
 import Recipe from '../models/Recipe.js';
 import User from '../models/User.js';
 
+
 const router = express.Router();
 
 
@@ -11,6 +12,8 @@ router.get('/', async (req, res) => {
       // Fetch all recipes and populate the 'createdBy' field with 'name' from the User schema
       const recipes = await Recipe.find()
         .populate('createdBy', 'name'); // Populate 'name' field from the User model
+
+        console.log(recipes)
   
       res.json(recipes);
 
@@ -61,6 +64,7 @@ router.post('/', async (req, res) => {
         
         // Find user by name
         const user = await User.findOne({ name: createdBy });
+        console.log(user);
         if (!user) {
             return res.status(400).json({ message: "User not found" });
         }        
