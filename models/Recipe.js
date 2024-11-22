@@ -34,6 +34,10 @@ const recipeSchema = new Schema({
     immutable: true, //unchangeable after it's initially set
     index: true, // Index for sorting recipes by creation date
   },
+  image: {
+    type: String, // URL of the image
+    //required: [true, "Image URL is required"],
+  }
 });
 
 export default model("Recipe", recipeSchema);

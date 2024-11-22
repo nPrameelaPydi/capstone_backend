@@ -57,7 +57,6 @@ router.get('/:id', async (req, res) => {
 router.post('/', async (req, res) => {
     try {
         const { title, ingredients, instructions, createdBy } = req.body;
-
         console.log("Request Body:", req.body);
         
         // Find user by name
