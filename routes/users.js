@@ -17,10 +17,10 @@ router.get('/:userId/profile', async (req, res) => {
             return res.status(404).json({message: 'User not found'});
         }
         //fetch all recipes created by this user
-        const recipes = await Recipe.find({createdBY: userId});
+        const recipes = await Recipe.find({createdBy: userId});
         //combine user data with their recipes
         res.json({user, recipes});
-        
+
     }catch(err){
         console.error(err);
         res.status(500).json({ message: 'Error fetching user profile', error: err.message });
