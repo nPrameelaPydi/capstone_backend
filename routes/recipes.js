@@ -21,7 +21,12 @@ router.get('/search', async (req, res) => {
           title: { $regex: title, $options: 'i' }
       });
 
-      res.json(recipes);
+      const results = recipes || [];
+
+      res.json(results);
+
+      console.log("Search results: #############", results);
+      
   } catch (error) {
       console.error(error);
       res.status(500).json({ message: 'Server Error' });
