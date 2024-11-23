@@ -22,7 +22,6 @@ router.get('/search', async (req, res) => {
       });
 
       const results = recipes || [];
-
       res.json(results);
 
       console.log("Search results: #############", results);
@@ -32,7 +31,6 @@ router.get('/search', async (req, res) => {
       res.status(500).json({ message: 'Server Error' });
   }
 });
-
 
 // Set up multer storage
 const storage = multer.diskStorage({
