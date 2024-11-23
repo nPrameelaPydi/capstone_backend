@@ -1,9 +1,49 @@
 import express from 'express';
 import Recipe from '../models/Recipe.js';
 import User from '../models/User.js';
+import multer from 'multer';
+import path from 'path';
+
+//import fs from 'fs';
+
+//// Ensure uploads directory exists
+//if (!fs.existsSync('./uploads')) {
+//  fs.mkdirSync('./uploads');
+//}
 
 
 const router = express.Router();
+
+// Set up multer storage
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, './uploads'); // Path where uploaded files will be stored
+  },
+  filename: function (req, file, cb) {
+    const uniqueSuffix = Date.now();
+    cb(null, uniqueSuffix + '-' + file.originalname); // Timestamp + file name
+  },
+});
+
+const upload = multer({ storage: storage });
+
+// POST route for image upload
+router.post('/upload-image', upload.single('image'), async (req, res) => {
+  try {
+    if (!req.file) {
+      return res.status(400).json({ message: 'No file uploaded' });
+    }
+
+    // Construct image URL
+    const imageUrl = `http://localhost:3000/uploads/${req.file.filename}`;
+
+    // Send back the image filename or URL
+    res.status(200).json({ message: 'Image uploaded successfully', imageUrl: imageUrl });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Error uploading image', error });
+  }
+}); 
 
 
 // GET route to fetch all recipes with populated 'createdBy' field
@@ -13,7 +53,7 @@ router.get('/', async (req, res) => {
       const recipes = await Recipe.find()
         .populate('createdBy', 'name'); // Populate 'name' field from the User model
 
-        console.log(recipes)
+        console.log(recipes);
   
       res.json(recipes);
 
@@ -45,7 +85,7 @@ router.get('/', async (req, res) => {
 router.get('/:id', async (req, res) => {
     try{
         const {id} = req.params;
-        const recipes = await Recipe.findById({id});
+        const recipes = await Recipe.findById(id);
         res.status(201).json(recipes);
     }catch(err){
         console.log(err);
@@ -59,7 +99,7 @@ router.get('/:id', async (req, res) => {
  */
 router.post('/', async (req, res) => {
     try {
-        const { title, ingredients, instructions, createdBy } = req.body;
+        const { title, ingredients, instructions, createdBy, image } = req.body;
         console.log("Request Body:", req.body);
         
         // Find user by name
@@ -75,6 +115,7 @@ router.post('/', async (req, res) => {
             ingredients,
             instructions,
             createdBy: user._id, // Assign the user's ObjectId,
+            image,
         });
 
         // Save the recipe to the database

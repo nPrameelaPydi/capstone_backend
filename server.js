@@ -7,11 +7,21 @@ import userRoutes from './routes/users.js';
 import recipeRoutes from './routes/recipes.js';
 import chatRoutes from './routes/chats.js';
 import authRoutes from './routes/auth.js';
+import multer from 'multer';
+import path from 'path';
+import { fileURLToPath } from 'url';
 
 dotenv.config();
 conn();
 const app = express();
 const PORT = process.env.PORT || 3000;
+
+//serve static files (uploaded images) 
+// Get current directory path in ES module
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 //Middlewares
 app.use(morgan('dev'));
