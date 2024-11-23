@@ -64,19 +64,19 @@ router.get('/', async (req, res) => {
   });
 
 
-/**
- * GET /api/recipes
- * @description GET route to fetch all recipes
- */
-router.get('/', async (req, res) => {
-    try{
-        const recipes = await Recipe.find();
-        res.json(recipes);
-    }catch(err){
-        console.log(err);
-        res.status(500).json({message: err.message});
-    }
-})
+///**
+// * GET /api/recipes
+// * @description GET route to fetch all recipes
+// */
+//router.get('/', async (req, res) => {
+//    try{
+//        const recipes = await Recipe.find();
+//        res.json(recipes);
+//    }catch(err){
+//        console.log(err);
+//        res.status(500).json({message: err.message});
+//    }
+//})
 
 /**
  * GET /api/recipes/id
@@ -126,6 +126,60 @@ router.post('/', async (req, res) => {
         console.log(error);
         res.status(500).json({ message: 'Error creating recipe', error });
     }
+});
+
+//// PATCH route to update a recipe
+//router.patch('/:id', async (req, res) => {
+//  try {
+//      const recipeId = req.params.id;
+//      const updateData = req.body;
+//      // Find the recipe and update it
+//      const updatedRecipe = await Recipe.findByIdAndUpdate(recipeId, updateData, {
+//          new: true,         // Return the updated recipe
+//          runValidators: true // Run validation for the updated fields
+//      });
+//      if (!updatedRecipe) {
+//          return res.status(404).json({ message: 'Recipe not found' });
+//      }
+//      res.json(updatedRecipe);
+//  } catch (err) {
+//      console.log(err);
+//      res.status(500).json({ message: 'Error updating recipe', error: err.message });
+//  }
+//});
+
+// PATCH route to update a recipe
+router.patch('/:id', upload.single('image'), async (req, res) => {
+  try {
+      const recipeId = req.params.id;
+
+      const updateData = { ...req.body }; 
+      if(req.file) {
+        console.log(`////////////////////////////////`)
+        console.log("Image file path:", `/uploads/${req.file.filename}`);
+
+        //if image is uploaded, include in updateData
+        updateData.image = `/uploads/${req.file.filename}`;
+      }
+
+      console.log("Update data:", updateData);
+      console.log(`/////////////////////////////////////////`)
+
+      // Find the recipe and update it
+      const updatedRecipe = await Recipe.findByIdAndUpdate(recipeId, updateData, {
+          new: true,         // Return the updated recipe
+          runValidators: true // Run validation for the updated fields
+      }).populate('createdBy');
+
+      if (!updatedRecipe) {
+          return res.status(404).json({ message: 'Recipe not found' });
+      }
+      res.json(updatedRecipe);// Return the updated recipe
+
+  } catch (err) {
+      console.log(err);
+      res.status(500).json({ message: 'Error updating recipe', error: err.message });
+  }
 });
 
 
