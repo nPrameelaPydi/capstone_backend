@@ -1,3 +1,50 @@
 //router.get('/', (req, res) => {
 //    res.send('Hello from users');
 //})
+
+
+
+//// PATCH route to update a recipe
+//router.patch('/:id', async (req, res) => {
+//  try {
+//      const recipeId = req.params.id;
+//      const updateData = req.body;
+//      // Find the recipe and update it
+//      const updatedRecipe = await Recipe.findByIdAndUpdate(recipeId, updateData, {
+//          new: true,         // Return the updated recipe
+//          runValidators: true // Run validation for the updated fields
+//      });
+//      if (!updatedRecipe) {
+//          return res.status(404).json({ message: 'Recipe not found' });
+//      }
+//      res.json(updatedRecipe);
+//  } catch (err) {
+//      console.log(err);
+//      res.status(500).json({ message: 'Error updating recipe', error: err.message });
+//  }
+//});
+
+
+
+///**
+// * GET /api/recipes
+// * @description GET route to fetch all recipes
+// */
+//router.get('/', async (req, res) => {
+//    try{
+//        const recipes = await Recipe.find();
+//        res.json(recipes);
+//    }catch(err){
+//        console.log(err);
+//        res.status(500).json({message: err.message});
+//    }
+//})
+
+
+
+//import fs from 'fs';
+
+//// Ensure uploads directory exists
+//if (!fs.existsSync('./uploads')) {
+//  fs.mkdirSync('./uploads');
+//}

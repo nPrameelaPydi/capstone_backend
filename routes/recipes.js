@@ -2,17 +2,32 @@ import express from 'express';
 import Recipe from '../models/Recipe.js';
 import User from '../models/User.js';
 import multer from 'multer';
-import path from 'path';
-
-//import fs from 'fs';
-
-//// Ensure uploads directory exists
-//if (!fs.existsSync('./uploads')) {
-//  fs.mkdirSync('./uploads');
-//}
+//import path from 'path';
 
 
 const router = express.Router();
+
+
+// Search recipes by title
+router.get('/search', async (req, res) => {
+  const { title } = req.query;
+  try {
+      if (!title) {
+          return res.status(400).json({ message: 'Title query parameter is required' });
+      }
+
+      //case-insensitive search using a regular expression
+      const recipes = await Recipe.find({
+          title: { $regex: title, $options: 'i' }
+      });
+
+      res.json(recipes);
+  } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: 'Server Error' });
+  }
+});
+
 
 // Set up multer storage
 const storage = multer.diskStorage({
@@ -64,20 +79,6 @@ router.get('/', async (req, res) => {
   });
 
 
-///**
-// * GET /api/recipes
-// * @description GET route to fetch all recipes
-// */
-//router.get('/', async (req, res) => {
-//    try{
-//        const recipes = await Recipe.find();
-//        res.json(recipes);
-//    }catch(err){
-//        console.log(err);
-//        res.status(500).json({message: err.message});
-//    }
-//})
-
 /**
  * GET /api/recipes/id
  * @description GET route to fetch recipe by id
@@ -128,25 +129,6 @@ router.post('/', async (req, res) => {
     }
 });
 
-//// PATCH route to update a recipe
-//router.patch('/:id', async (req, res) => {
-//  try {
-//      const recipeId = req.params.id;
-//      const updateData = req.body;
-//      // Find the recipe and update it
-//      const updatedRecipe = await Recipe.findByIdAndUpdate(recipeId, updateData, {
-//          new: true,         // Return the updated recipe
-//          runValidators: true // Run validation for the updated fields
-//      });
-//      if (!updatedRecipe) {
-//          return res.status(404).json({ message: 'Recipe not found' });
-//      }
-//      res.json(updatedRecipe);
-//  } catch (err) {
-//      console.log(err);
-//      res.status(500).json({ message: 'Error updating recipe', error: err.message });
-//  }
-//});
 
 // PATCH route to update a recipe
 router.patch('/:id', upload.single('image'), async (req, res) => {
