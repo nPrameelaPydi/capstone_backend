@@ -4,6 +4,11 @@ The **Food & Friends** backend is built with Node.js and Express.js to manage
 recipe-related data and user authentication.
 It uses MongoDB for data persistence and Multer for file uploads.
 
+## **Link to Live Site**
+
+[Food & Friends API](#)  
+_(https://capstone-backend-yyg5.onrender.com)_
+
 ---
 
 ## **Features**
