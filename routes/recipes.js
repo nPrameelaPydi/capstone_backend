@@ -89,8 +89,10 @@ router.get('/', async (req, res) => {
 router.get('/:id', async (req, res) => {
     try{
         const {id} = req.params;
-        const recipes = await Recipe.findById(id);
-        res.status(201).json(recipes);
+        //const recipes = await Recipe.findById(id);
+        // Populate the 'createdBy' field with the corresponding user's name
+        const recipe = await Recipe.findById(id).populate('createdBy', 'name');
+        res.status(201).json(recipe);
     }catch(err){
         console.log(err);
         res.status(500).json({message: err.message});
